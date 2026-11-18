@@ -102,6 +102,10 @@ a:hover { text-decoration: underline; }
 
 /* ---------- Nav ---------- */
 .nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
   display: flex;
   flex-wrap: wrap;
   gap: 4px 20px;
@@ -127,7 +131,7 @@ a:hover { text-decoration: underline; }
 }
 
 /* ---------- Sections ---------- */
-section { padding-top: 36px; }
+section { padding-top: 36px; scroll-margin-top: 56px; }
 
 h2 {
   margin: 0 0 16px;
@@ -228,6 +232,7 @@ footer {
 /* ---------- Mobile ---------- */
 @media (max-width: 600px) {
   .container { padding-top: 32px; }
+  section { scroll-margin-top: 84px; }
   .header { flex-direction: column; text-align: center; gap: 18px; }
   .links { justify-content: center; }
   .photo { flex-basis: 128px; width: 128px; height: 128px; font-size: 38px; }
