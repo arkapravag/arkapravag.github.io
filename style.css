@@ -236,3 +236,13 @@ footer {
   .skills { grid-template-columns: 1fr; }
   .skills dd { margin-bottom: 8px; }
 }
+
+.pub-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.pub-links a {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1px 8px;
+}
+.pub-links a:hover { border-color: var(--link); text-decoration: none; }
