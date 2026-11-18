@@ -9,6 +9,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=5">
+  <script>
+    // Light theme from 7 am to 7 pm in the visitor's local time, dark otherwise.
+    // Runs before the page renders so there is no flash of the wrong theme.
+    window.timeOfDayTheme = function () {
+      var h = new Date().getHours();
+      return h >= 7 && h < 19 ? "light" : "dark";
+    };
+    (function () {
+      var theme = null;
+      try {
+        localStorage.removeItem("theme"); // clear the old permanent setting
+        theme = sessionStorage.getItem("theme");
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", theme || window.timeOfDayTheme());
+    })();
+  </script>
 </head>
 <body>
   <div class="container">
@@ -275,20 +291,20 @@
   </div>
 
   <script>
-    // Dark-mode toggle: remembers the choice per browser, falls back to system setting.
+    // Dark-mode toggle: overrides the time-of-day theme for the rest of this visit.
     (function () {
       var root = document.documentElement;
-      try {
-        var saved = localStorage.getItem("theme");
-        if (saved) root.setAttribute("data-theme", saved);
-      } catch (e) {}
       document.getElementById("theme-toggle").addEventListener("click", function () {
-        var current = root.getAttribute("data-theme") ||
-          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-        var next = current === "dark" ? "light" : "dark";
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
         root.setAttribute("data-theme", next);
-        try { localStorage.setItem("theme", next); } catch (e) {}
+        try { sessionStorage.setItem("theme", next); } catch (e) {}
       });
+      // Keep following the clock (e.g. switch at 7 pm) unless the visitor chose a theme.
+      setInterval(function () {
+        var chosen = null;
+        try { chosen = sessionStorage.getItem("theme"); } catch (e) {}
+        if (!chosen) root.setAttribute("data-theme", window.timeOfDayTheme());
+      }, 60000);
     })();
   </script>
 </body>
